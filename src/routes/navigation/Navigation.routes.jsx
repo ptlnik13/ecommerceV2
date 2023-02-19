@@ -1,6 +1,5 @@
-import {Fragment} from "react";
-import {Outlet, Link} from "react-router-dom";
-import {useContext} from "react";
+import {Fragment, useContext} from "react";
+import {Link, Outlet} from "react-router-dom";
 import {UserContext} from "../../context/user.context";
 import {signOutUser} from "../../utils/firebase/firebase.utils";
 import {ReactComponent as CrwnLogo} from "../../assets/images/crown.svg";
@@ -9,11 +8,10 @@ import "./navigation.styles.scss";
 import './navigation.styles.scss';
 
 const NavigationRoutes = () => {
-    const {currentUser, setCurrentUser} = useContext(UserContext);
+    const {currentUser} = useContext(UserContext);
 
     const signOutHandler =async ()=>{
-        const res = await signOutUser();
-        setCurrentUser(null);
+        await signOutUser();
     }
 
     return (
