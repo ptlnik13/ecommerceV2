@@ -6,11 +6,13 @@ import {ReactComponent as CrwnLogo} from "../../assets/images/crown.svg";
 import "./navigation.styles.scss";
 
 import './navigation.styles.scss';
+import CartIconComponent from "../../components/cart-icon/cart-icon.component";
+import CartDropdownComponent from "../../components/cart-dropdown/cart-dropdown.component";
 
 const NavigationRoutes = () => {
     const {currentUser} = useContext(UserContext);
 
-    const signOutHandler =async ()=>{
+    const signOutHandler = async () => {
         await signOutUser();
     }
 
@@ -27,7 +29,9 @@ const NavigationRoutes = () => {
                     {
                         currentUser ? (<span className='nav-link' onClick={signOutHandler}>SIGN OUT</span>) : (<Link className='nav-link' to='/auth'>SIGN IN</Link>)
                     }
+                    <CartIconComponent/>
                 </div>
+                <CartDropdownComponent/>
             </div>
             <Outlet/>
         </Fragment>
