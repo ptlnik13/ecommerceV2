@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app';
 import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut,} from 'firebase/auth';
-import {doc, getDoc, getFirestore, setDoc, collection, writeBatch} from 'firebase/firestore';
+import {collection, doc, getDoc,getDocs, getFirestore, query, setDoc, writeBatch} from 'firebase/firestore';
 
 
 const firebaseConfig = {
@@ -27,11 +27,11 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 export const db = getFirestore();
 
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd)=>{
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
     const collectionRef = collection(db, collectionKey);
     const batch = writeBatch(db);
 
-    objectsToAdd.forEach(object=>{
+    objectsToAdd.forEach(object => {
         const docRef = doc(collectionRef, object.title.toLowerCase());
         batch.set(docRef, object);
     })
@@ -39,6 +39,17 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd)=>{
     console.log('DONE');
 }
 
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.reduce((acc, docSnapshot) => {
+        const {title, items} = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+}
 
 export const createUserDocumentFromAuth = async (
     userAuth,
@@ -83,6 +94,6 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth);
 
-export const onAuthStateChangedListener = (cb)=> {
-  return onAuthStateChanged(auth, cb);
+export const onAuthStateChangedListener = (cb) => {
+    return onAuthStateChanged(auth, cb);
 }
