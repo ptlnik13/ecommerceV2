@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter} from "react-router-dom";
-import {UserProvider} from "./context/user.context";
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {CategoriesProvider} from "./context/categoriesContext";
 import {CartProvider} from "./context/cart.context";
 import {Provider} from "react-redux";
 import {store} from "./store/store";
@@ -16,11 +14,11 @@ root.render(
         <Provider store={store}>
             <BrowserRouter>
 
-                <CategoriesProvider>
-                    <CartProvider>
-                        <App/>
-                    </CartProvider>
-                </CategoriesProvider>
+
+                <CartProvider>
+                    <App/>
+                </CartProvider>
+
 
             </BrowserRouter>
         </Provider>
