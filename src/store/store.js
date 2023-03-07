@@ -13,7 +13,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const middlewares = [logger]
+const middlewares = [process.env.NODE_ENV !== 'development' && logger].filter(Boolean);
 const composedEnhancers = compose(applyMiddleware(...middlewares));
 export const store = createStore(persistedReducer, undefined, composedEnhancers)
 export const persistor = persistStore(store);
