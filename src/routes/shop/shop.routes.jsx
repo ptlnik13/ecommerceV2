@@ -3,7 +3,7 @@ import CategoriesPreviewRoutes from "../categories-preview/categories-preview.co
 import CategoryRoutes from "../category/category.routes";
 import {useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {fetchCategoriesAsync} from "../../store/categories/category.actions";
+import {fetchCategoriesStart} from "../../store/categories/category.actions";
 
 
 const ShopRoutes = () => {
@@ -11,7 +11,7 @@ const ShopRoutes = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchCategoriesAsync());
+        dispatch(fetchCategoriesStart());
     }, []);
 
     return (
