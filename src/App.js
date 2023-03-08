@@ -5,15 +5,15 @@ import AuthenticationRoutes from './routes/authentication/authentication.routes'
 import ShopRoutes from "./routes/shop/shop.routes";
 import CheckoutRoutes from "./routes/checkout/checkout.routes";
 import {Fragment, useEffect} from "react";
-import {fetchCurrentUserAsync} from "./store/user/user.actions";
 import {useDispatch, useSelector} from "react-redux";
 import {selectCurrentUserIsLoading} from "./store/user/user.selectors";
 import SpinnerComponent from "./components/spinner/spinner.component";
+import {checkUserSession} from "./store/user/user.actions";
 
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchCurrentUserAsync());
+        dispatch(checkUserSession());
     }, [/* dispatch */]);
     const isLoading = useSelector(selectCurrentUserIsLoading)
     return (

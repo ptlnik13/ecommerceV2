@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app';
 import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut,} from 'firebase/auth';
-import {collection, doc, getDoc,getDocs, getFirestore, query, setDoc, writeBatch} from 'firebase/firestore';
+import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch} from 'firebase/firestore';
 
 
 const firebaseConfig = {
@@ -44,7 +44,7 @@ export const getCategoriesAndDocuments = async () => {
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(docSnapshot=>docSnapshot.data())
+    return querySnapshot.docs.map(docSnapshot => docSnapshot.data())
 
 }
 
@@ -74,7 +74,7 @@ export const createUserDocumentFromAuth = async (
         }
     }
 
-    return userDocRef;
+    return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -93,4 +93,16 @@ export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = (cb) => {
     return onAuthStateChanged(auth, cb);
+}
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+
+        const unsubscribe = onAuthStateChanged(auth, userAuth => {
+                unsubscribe();
+                resolve(userAuth)
+            },
+            reject)
+
+    })
 }

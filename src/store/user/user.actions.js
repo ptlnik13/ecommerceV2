@@ -1,30 +1,13 @@
 import {createAction} from "../../utils/reducer/reducer.utils";
 import {USER_ACTION_TYPES} from "./user.types";
-import {createUserDocumentFromAuth, onAuthStateChangedListener} from "../../utils/firebase/firebase.utils";
 
 
-const fetchCurrentUserStart = () => {
-    return createAction(USER_ACTION_TYPES.FETCH_CURRENT_USER_START);
-}
+export const checkUserSession = () => createAction(USER_ACTION_TYPES.CHECK_USER_SESSION);
 
-const fetchCurrentUserSuccess = (user) => {
-    return createAction(USER_ACTION_TYPES.FETCH_CURRENT_USER_SUCCESS, user);
-}
+export const googleSignInStart = () => createAction(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START);
 
-const fetchCurrentUserFailed = (error) => {
-    return createAction(USER_ACTION_TYPES.FETCH_CURRENT_USER_FAILED, error);
-}
+export const emailSignInStart = (email, password) => createAction(USER_ACTION_TYPES.EMAIL_SIGN_IN_START, {email, password});
 
-export const fetchCurrentUserAsync = () => async (dispatch) => {
-    dispatch(fetchCurrentUserStart());
-    try {
-        onAuthStateChangedListener(async (user) => {
-            if (user) {
-                await createUserDocumentFromAuth(user);
-            }
-            dispatch(fetchCurrentUserSuccess(user));
-        });
-    } catch (e) {
-        dispatch(fetchCurrentUserFailed(e));
-    }
-}
+export const signInSuccess = (user) => createAction(USER_ACTION_TYPES.SIGN_IN_SUCCESS, user);
+
+export const signInFailed = (error) => createAction(USER_ACTION_TYPES.SIGN_IN_FAILED, error);
