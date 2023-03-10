@@ -1,7 +1,7 @@
 import {takeLatest, call, put, all} from 'redux-saga/effects';
 import {USER_ACTION_TYPES} from "./user.types";
-import {signInSuccess, signInFailed} from "./user.actions";
-import {getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword} from "../../utils/firebase/firebase.utils";
+import {signInSuccess, signInFailed, emailSignUpSuccess, emailSignUpFailed} from "./user.actions";
+import {getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword, createAuthUserWithEmailAndPassword} from "../../utils/firebase/firebase.utils";
 
 
 function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
@@ -43,6 +43,19 @@ function* signInWithEmail({payload: {email, password}}) {
     }
 }
 
+function* signUpWithEmail({payload: {email, password, displayName}}) {
+    try {
+        const {user} = yield call(createAuthUserWithEmailAndPassword, email, password);
+        yield put(emailSignUpSuccess(user, {displayName}));
+    } catch (e) {
+        yield put(emailSignUpFailed(e));
+    }
+}
+
+function* signInAfterSignUp({payload: {user, additionalDetails}}) {
+    yield call(getSnapshotFromUserAuth, user, additionalDetails);
+}
+
 function* onCheckUserSession() {
     yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated)
 }
@@ -55,6 +68,20 @@ function* onEmailSignInStart() {
     yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_IN_START, signInWithEmail)
 }
 
+function* onEmailSignUpStart() {
+    yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_UP_START, signUpWithEmail)
+}
+
+function* onEmailSignUpSuccess() {
+    yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_UP_SUCCESS, signInAfterSignUp)
+}
+
 export function* userSagas() {
-    yield all([call(onCheckUserSession), call(onGoogleSignInStart), call(onEmailSignInStart)])
+    yield all([
+        call(onCheckUserSession),
+        call(onGoogleSignInStart),
+        call(onEmailSignInStart),
+        call(onEmailSignUpStart),
+        call(onEmailSignUpSuccess),
+    ])
 }
