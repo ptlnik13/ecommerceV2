@@ -6,8 +6,6 @@ import ShopRoutes from "./routes/shop/shop.routes";
 import CheckoutRoutes from "./routes/checkout/checkout.routes";
 import {Fragment, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {selectCurrentUserIsLoading} from "./store/user/user.selectors";
-import SpinnerComponent from "./components/spinner/spinner.component";
 import {checkUserSession} from "./store/user/user.actions";
 
 const App = () => {
@@ -15,22 +13,15 @@ const App = () => {
     useEffect(() => {
         dispatch(checkUserSession());
     }, [/* dispatch */]);
-    const isLoading = useSelector(selectCurrentUserIsLoading)
     return (
-        <Fragment>
-            {
-                isLoading ? <SpinnerComponent/> :
-
-                    (<Routes>
-                        <Route path='/' element={<NavigationRoutes/>}>
-                            <Route index element={<HomeRoutes/>}/>
-                            <Route path='shop/*' element={<ShopRoutes/>}/>
-                            <Route path='checkout' element={<CheckoutRoutes/>}/>
-                            <Route path='auth' element={<AuthenticationRoutes/>}/>
-                        </Route>
-                    </Routes>)
-            }
-        </Fragment>
+        <Routes>
+            <Route path='/' element={<NavigationRoutes/>}>
+                <Route index element={<HomeRoutes/>}/>
+                <Route path='shop/*' element={<ShopRoutes/>}/>
+                <Route path='checkout' element={<CheckoutRoutes/>}/>
+                <Route path='auth' element={<AuthenticationRoutes/>}/>
+            </Route>
+        </Routes>
     )
 };
 
