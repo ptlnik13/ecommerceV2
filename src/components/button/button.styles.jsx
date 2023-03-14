@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {SpinnerContainer} from "../spinner/spinner.styles";
 
 const BaseButton = styled.button`
   min-width: 165px;
@@ -11,12 +12,13 @@ const BaseButton = styled.button`
   background-color: black;
   color: white;
   text-transform: uppercase;
-  font-family: 'Open Sans Condensed';
+  font-family: 'Open Sans Condensed', serif;
   font-weight: bolder;
   border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   &:hover {
     background-color: white;
@@ -47,4 +49,9 @@ const InvertedButton = styled(BaseButton)`
   }
 `
 
-export {BaseButton, GoogleSignInButton, InvertedButton}
+const ButtonSpinner = styled(SpinnerContainer)`
+  width: 30px;
+  height: 30px;
+`
+
+export {BaseButton, GoogleSignInButton, InvertedButton, ButtonSpinner}
